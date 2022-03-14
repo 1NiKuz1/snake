@@ -1,0 +1,21 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "be814655-205d-4758-9686-331b18b72b65": {
+      "ProjectGuid": "be814655-205d-4758-9686-331b18b72b65",
+      "DisplayName": "Snake",
+      "ColorIndex": 0
+    },
+    "3a162ccb-3520-47a2-b4f6-e777aaad6f52": {
+      "ProjectGuid": "3a162ccb-3520-47a2-b4f6-e777aaad6f52",
+      "DisplayName": "SnakeForm",
+      "ColorIndex": 1
+    },
+    "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3": {
+      "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
+      "DisplayName": "Прочие файлы",
+      "ColorIndex": -1
+    }
+  },
+  "NextColorIndex": 2
+}

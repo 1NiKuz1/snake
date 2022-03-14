@@ -1,0 +1,14 @@
+D:\project-code\Кузнецов Н\Snake\SnakeForm\bin\Release\SnakeForm.exe.config
+D:\project-code\Кузнецов Н\Snake\SnakeForm\bin\Release\SnakeForm.exe
+D:\project-code\Кузнецов Н\Snake\SnakeForm\bin\Release\SnakeForm.pdb
+D:\project-code\Кузнецов Н\Snake\SnakeForm\bin\Release\Snake.dll
+D:\project-code\Кузнецов Н\Snake\SnakeForm\bin\Release\Snake.pdb
+D:\project-code\Кузнецов Н\Snake\SnakeForm\obj\Release\SnakeForm.csproj.AssemblyReference.cache
+D:\project-code\Кузнецов Н\Snake\SnakeForm\obj\Release\SnakeForm.csproj.SuggestedBindingRedirects.cache
+D:\project-code\Кузнецов Н\Snake\SnakeForm\obj\Release\SnakeForm.Form1.resources
+D:\project-code\Кузнецов Н\Snake\SnakeForm\obj\Release\SnakeForm.Properties.Resources.resources
+D:\project-code\Кузнецов Н\Snake\SnakeForm\obj\Release\SnakeForm.csproj.GenerateResource.cache
+D:\project-code\Кузнецов Н\Snake\SnakeForm\obj\Release\SnakeForm.csproj.CoreCompileInputs.cache
+D:\project-code\Кузнецов Н\Snake\SnakeForm\obj\Release\SnakeForm.csproj.CopyComplete
+D:\project-code\Кузнецов Н\Snake\SnakeForm\obj\Release\SnakeForm.exe
+D:\project-code\Кузнецов Н\Snake\SnakeForm\obj\Release\SnakeForm.pdb

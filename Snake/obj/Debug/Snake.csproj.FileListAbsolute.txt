@@ -1,0 +1,5 @@
+D:\project-code\Кузнецов Н\Snake\Snake\bin\Debug\Snake.dll
+D:\project-code\Кузнецов Н\Snake\Snake\bin\Debug\Snake.pdb
+D:\project-code\Кузнецов Н\Snake\Snake\obj\Debug\Snake.csproj.CoreCompileInputs.cache
+D:\project-code\Кузнецов Н\Snake\Snake\obj\Debug\Snake.dll
+D:\project-code\Кузнецов Н\Snake\Snake\obj\Debug\Snake.pdb

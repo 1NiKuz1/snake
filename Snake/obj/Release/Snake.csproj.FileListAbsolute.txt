@@ -1,0 +1,6 @@
+D:\project-code\Кузнецов Н\Snake\Snake\bin\Release\Snake.dll
+D:\project-code\Кузнецов Н\Snake\Snake\bin\Release\Snake.pdb
+D:\project-code\Кузнецов Н\Snake\Snake\obj\Release\Snake.csproj.AssemblyReference.cache
+D:\project-code\Кузнецов Н\Snake\Snake\obj\Release\Snake.csproj.CoreCompileInputs.cache
+D:\project-code\Кузнецов Н\Snake\Snake\obj\Release\Snake.dll
+D:\project-code\Кузнецов Н\Snake\Snake\obj\Release\Snake.pdb
