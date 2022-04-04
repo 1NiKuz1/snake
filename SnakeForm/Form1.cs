@@ -20,29 +20,29 @@ namespace SnakeForm
 
         private void startButton_Click(object sender, EventArgs e)
         {
-            game.startProcess();
+            game.StartProcess();
         }
 
         private void endButton_Click(object sender, EventArgs e)
         {
-            game.endProcess();
+            game.EndProcess();
         }
 
         private void game_recordScore(object sender, EventArgs e)
         {
-            int score = game.score;
+            int score = game.Score;
             scoreLabel.Text = "Score: " + --score;
         }
 
         private void game_recordBestScore(object sender, EventArgs e)
         {
-            int bestScore = (game.bestScore == 0) ? 1 : game.bestScore;
+            int bestScore = (game.BestScore == 0) ? 1 : game.BestScore;
             bestScoreLabel.Text = "Best score: " + --bestScore;
         }
 
         private void game_recordLives(object sender, EventArgs e)
         {
-            lives.Text = "Lives: " + game.lives;
+            lives.Text = "Lives: " + game.Lives;
         }
     }
 }

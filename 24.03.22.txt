@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -12,30 +12,32 @@ namespace Snake
 {
     public class Game : Control
     {
+        protected int _posFructX, _posFructY;
         protected int _lives = 1;
         protected bool _snakeStatus = true;
         protected bool _gameStatus = false;
         protected int _currentDurationGhost = 0;
         protected PictureBox _fruit;
         protected PictureBox[] _snake = new PictureBox[225];
+        protected Label _gameStatusLabel;
         protected int _dirX = -1;
         protected int _dirY = 0;
         protected int _mapSize = 301;
         protected int _sizeOfSides = 20;
         protected int _score = 1;
         protected int _bestScore = 0;
-        private int _oldWidth = 0;
-        private int _oldHeight = 0;
-        protected Color _mapColor = Color.Black;
-        protected Color _fructColor = Color.Red;
-        protected Color _headColor = Color.DarkGreen;
-        protected Color _tailColor = Color.Green;
+        protected Color _mapColor;
+        protected Color _fructColor;
+        protected Color _headColor;
+        protected Color _tailColor;
         protected Color _currentHeadColor;
         protected Color _currentTailColor;
         protected System.Timers.Timer _timer;
         protected event EventHandler _recordScore;
         protected event EventHandler _recordBestScore;
         protected event EventHandler _recordLives;
+
+
 
         public event EventHandler RecordScore
         {
@@ -174,7 +176,10 @@ namespace Snake
                     Invalidate();
                 }
             }
-        }       
+        }
+
+        int oldWidth = 0;
+        int oldHeight = 0;
 
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
@@ -190,41 +195,50 @@ namespace Snake
             }
             if (Created)
             {
-                if (_oldWidth == width || _oldHeight == height)
+                //height = (width > height) ? width : height;
+                //width = (height > width) ? height : width;
+                if (oldWidth == width || oldHeight == height)
                 {
-                    if (_oldHeight != height)
+                    if (oldWidth != width)
+                    {
+                        height = width;
+                    }
+                    if (oldHeight != height)
                     {
                         width = height;
                     }
-                    if (_oldWidth != width)
-                    {
-                        height = width;
-                    }                   
                 }
-                if (_oldHeight < height && height % 15 == 1)
-                {
-                    _mapSize = height;
-                    _sizeOfSides = height / 15;
-                    SettingAdaptiveValuesForObjects(oldSizeOfSides);
-                } else if(_oldHeight > height)
-                {
-                    _mapSize = height;
-                    _sizeOfSides = height / 15;
-                    SettingAdaptiveValuesForObjects(oldSizeOfSides);
-                }
+                _mapSize = height;
+                _sizeOfSides = height / 15;
+                SettingAdaptiveValuesForObjects(oldSizeOfSides);
+                //if (height % 15 == 0)
+                //{
+                //    _mapSize = height;
+                //    _sizeOfSides = height / 15;
+                //    SettingAdaptiveValuesForObjects(oldSizeOfSides);
+                //}
+                //if (width % 15 == 0)
+                //{
+                //    _mapSize = width;
+                //    _sizeOfSides = width / 15;
+                //    SettingAdaptiveValuesForObjects(oldSizeOfSides);
+                //}
             }
-            _oldWidth = width;
-            _oldHeight = height;
-            Invalidate();
+            oldWidth = width;
+            oldHeight = height;
             base.SetBoundsCore(x, y, width, height, specified);
         }
 
         public Game() : base()
         {
+            MapColor = Color.Black;
+            FructColor = Color.Red;
+            HeadColor = Color.DarkGreen;
+            TailColor = Color.Green;
             _currentHeadColor = HeadColor;
             _currentTailColor = TailColor;
             SetStartPositionObjects();
-            //GenerateFruit();
+            GenerateFruit();
             _timer = new System.Timers.Timer(150);
             _timer.AutoReset = true;
             _timer.Elapsed += Update;
@@ -238,77 +252,62 @@ namespace Snake
             {
                 Location = new Point(_sizeOfSides * 7 + 1, _sizeOfSides * 7 + 1),
                 Size = new Size(_sizeOfSides - 1, _sizeOfSides - 1),
-                BackColor = HeadColor
+                BackColor = _headColor
             };
             this.Controls.Add(_snake[0]);
             _snake[1] = new PictureBox
             {
                 Location = new Point(_sizeOfSides * 7 + 1 + _sizeOfSides, _sizeOfSides * 7 + 1),
                 Size = new Size(_sizeOfSides - 1, _sizeOfSides - 1),
-                BackColor = TailColor
+                BackColor = _tailColor
             };
             this.Controls.Add(_snake[1]);
             _fruit = new PictureBox
             {
-                BackColor = FructColor,
+                BackColor = _fructColor,
                 Size = new Size(_sizeOfSides - 1, _sizeOfSides - 1)
             };
-            GenerateFruit();
         }     
 
         private void SettingAdaptiveValuesForObjects(int oldSizeOfSides)
         {
-            int fruitLocX = _fruit.Location.X / oldSizeOfSides;
-            int fruitLocY = _fruit.Location.Y / oldSizeOfSides;
+            int fuitLocX = _fruit.Location.X / oldSizeOfSides;
+            int fuitLocY = _fruit.Location.Y / oldSizeOfSides;
             _fruit.Size = new Size(_sizeOfSides - 1, _sizeOfSides - 1);
-            _fruit.Location = new Point(_sizeOfSides * fruitLocX + 1, _sizeOfSides * fruitLocY + 1);
-            if (_snake[Score] != null)
-            {
-                for (int i = 0; i <= Score; i++)
-                {
-                    _snake[i].Size = new Size(_sizeOfSides - 1, _sizeOfSides - 1);
-                    _snake[i].Location = new Point(_sizeOfSides * (_snake[i].Location.X / oldSizeOfSides) + 1,
-                        _sizeOfSides * (_snake[i].Location.Y / oldSizeOfSides) + 1);
-                }
-            } else
-            {
-                for (int i = 0; i < Score; i++)
-                {
-                    _snake[i].Size = new Size(_sizeOfSides - 1, _sizeOfSides - 1);
-                    _snake[i].Location = new Point(_sizeOfSides * (_snake[i].Location.X / oldSizeOfSides) + 1,
-                        _sizeOfSides * (_snake[i].Location.Y / oldSizeOfSides) + 1);
-                }
-            }       
+            _fruit.Location = new Point(_sizeOfSides * fuitLocX + 1, _sizeOfSides * fuitLocY + 1);
+            _snake[0].Size = new Size(_sizeOfSides - 1, _sizeOfSides - 1);
+            _snake[0].Location = new Point(_sizeOfSides * 7 + 1, _sizeOfSides * 7 + 1);
+            _snake[1].Location = new Point(_sizeOfSides * 7 + 1 + _sizeOfSides, _sizeOfSides * 7 + 1);
+            _snake[1].Size = new Size(_sizeOfSides - 1, _sizeOfSides - 1);
         }       
 
         protected void GenerateFruit()
         {
-            int posFructX, posFructY;
             Random r = new Random();
 
-            posFructX = r.Next(0, _mapSize - _sizeOfSides);
-            posFructX = posFructX / _sizeOfSides * _sizeOfSides;
-            posFructX++;
+            _posFructX = r.Next(0, _mapSize - _sizeOfSides);
+            _posFructX = _posFructX / _sizeOfSides * _sizeOfSides;
+            _posFructX++;
 
-            posFructY = r.Next(0, _mapSize - _sizeOfSides);
-            posFructY = posFructY / _sizeOfSides * _sizeOfSides;
-            posFructY++;
+            _posFructY = r.Next(0, _mapSize - _sizeOfSides);
+            _posFructY = _posFructY / _sizeOfSides * _sizeOfSides;
+            _posFructY++;
 
             for (int i = 0; i <= Score; i++)
             {
-                if (_snake[i].Location.X == posFructX && _snake[i].Location.Y == posFructY)
+                while (_snake[i].Location.X == _posFructX && _snake[i].Location.Y == _posFructY)
                 {
-                    posFructX = r.Next(0, _mapSize - _sizeOfSides);
-                    posFructX = posFructX / _sizeOfSides * _sizeOfSides;
-                    posFructX++;
+                    _posFructX = r.Next(0, _mapSize - _sizeOfSides);
+                    _posFructX = _posFructX / _sizeOfSides * _sizeOfSides;
+                    _posFructX++;
 
-                    posFructY = r.Next(0, _mapSize - _sizeOfSides);
-                    posFructY = posFructY / _sizeOfSides * _sizeOfSides;
-                    posFructY++;
+                    _posFructY = r.Next(0, _mapSize - _sizeOfSides);
+                    _posFructY = _posFructY / _sizeOfSides * _sizeOfSides;
+                    _posFructY++;
                     i = 0;
                 }
             }          
-            _fruit.Location = new Point(posFructX, posFructY);
+            _fruit.Location = new Point(_posFructX, _posFructY);
             this.Controls.Add(_fruit);
         }
 
@@ -356,12 +355,18 @@ namespace Snake
                 Size = new Size(_sizeOfSides - 1, _sizeOfSides - 1),
                 BackColor = _currentTailColor
             };
+            //Тоже самое, что и выше
+            //_snake[Score] = new PictureBox();
+            //_snake[Score].Location = new Point(_snake[Score - 1].Location.X - _sizeOfSides * _dirX,
+            //                                  _snake[Score - 1].Location.Y - _sizeOfSides * _dirY);
+            //_snake[Score].Size = new Size(_sizeOfSides - 1, _sizeOfSides - 1);
+            //_snake[Score].BackColor = _currentTailColor;
             this.Controls.Add(_snake[Score]);
         }
 
         protected void EatFruit()
         {
-            if (_snake[0].Location.X == _fruit.Location.X && _snake[0].Location.Y == _fruit.Location.Y)
+            if (_snake[0].Location.X == _posFructX && _snake[0].Location.Y == _posFructY)
             {
                 Score++;
                 CreateSnakeTailElement();
@@ -473,7 +478,7 @@ namespace Snake
             {
                 _gameStatus = false;
                 SetStartPositionObjects();
-                //GenerateFruit();
+                GenerateFruit();
                 Lives = 1;
             }
             Invalidate();
@@ -484,7 +489,7 @@ namespace Snake
             _timer.Stop();
             OnRecordBestScore();
             _currentHeadColor = HeadColor;
-            _currentTailColor = TailColor;
+            _currentTailColor = TailColor;         
             ClearSnake();
             Controls.Remove(_fruit);
             _gameStatus = true;
@@ -519,14 +524,6 @@ namespace Snake
             Brush b = new SolidBrush(BackColor);
             e.Graphics.FillRectangle(b, ClientRectangle);
             b = new SolidBrush(MapColor);
-            _fruit.BackColor = FructColor;           
-            if (_snakeStatus)
-            {
-                _snake[0].BackColor = HeadColor;
-                _snake[1].BackColor = TailColor;
-                _currentHeadColor = HeadColor;
-                _currentTailColor = TailColor;
-            }
 
             Pen p = new Pen(MapColor, 1);
             for (int i = 0; i <= _mapSize / _sizeOfSides; i++)
@@ -552,7 +549,7 @@ namespace Snake
                 RectangleF rect = new RectangleF(0, 0, _mapSize, _mapSize);
                 e.Graphics.DrawString(s, font, fontB, rect, sf);
                 Score = 1;
-            }           
+            }
             b.Dispose();
         }
 
