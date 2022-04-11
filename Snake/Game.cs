@@ -178,8 +178,9 @@ namespace Snake
 
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
-            
+            //Запоминаем размеры одной клетки
             int oldSizeOfSides = _sizeOfSides;
+            //Проверка минимальных значений высоты и ширины
             if (width < 301 || height < 301)
             {
                 width = 301;
@@ -188,6 +189,7 @@ namespace Snake
                 _sizeOfSides = 20;
                 SettingAdaptiveValuesForObjects(oldSizeOfSides);
             }
+            //Установка адаптивных значений
             if (Created)
             {
                 if (_oldWidth == width || _oldHeight == height)
@@ -213,6 +215,7 @@ namespace Snake
                     SettingAdaptiveValuesForObjects(oldSizeOfSides);
                 }
             }
+            //Запоминаем значения ширины и высоты
             _oldWidth = width;
             _oldHeight = height;
             Invalidate();
@@ -224,7 +227,6 @@ namespace Snake
             _currentHeadColor = HeadColor;
             _currentTailColor = TailColor;
             SetStartPositionObjects();
-            //GenerateFruit();
             _timer = new System.Timers.Timer(150);
             _timer.AutoReset = true;
             _timer.Elapsed += Update;
@@ -261,7 +263,7 @@ namespace Snake
             int fruitLocX = _fruit.Location.X / oldSizeOfSides;
             int fruitLocY = _fruit.Location.Y / oldSizeOfSides;
             _fruit.Size = new Size(_sizeOfSides - 1, _sizeOfSides - 1);
-            _fruit.Location = new Point(_sizeOfSides * fruitLocX + 1, _sizeOfSides * fruitLocY + 1);
+            _fruit.Location = new Point(_sizeOfSides * fruitLocX + 1, _sizeOfSides * fruitLocY + 1);           
             if (_snake[Score] != null)
             {
                 for (int i = 0; i <= Score; i++)
@@ -270,7 +272,8 @@ namespace Snake
                     _snake[i].Location = new Point(_sizeOfSides * (_snake[i].Location.X / oldSizeOfSides) + 1,
                         _sizeOfSides * (_snake[i].Location.Y / oldSizeOfSides) + 1);
                 }
-            } else
+            }
+            else //В случае если новый объект хвоста змейки не успел создаться, обновляем свойства змейки без его учета
             {
                 for (int i = 0; i < Score; i++)
                 {
@@ -294,8 +297,10 @@ namespace Snake
             posFructY = posFructY / _sizeOfSides * _sizeOfSides;
             posFructY++;
 
+            //Пробегаеся по всей змейки
             for (int i = 0; i <= Score; i++)
             {
+                //Если поизиция фрукта совпадает с позициями змейки генерируем новые координаты и повторяем процедуру
                 if (_snake[i].Location.X == posFructX && _snake[i].Location.Y == posFructY)
                 {
                     posFructX = r.Next(0, _mapSize - _sizeOfSides);
@@ -364,8 +369,12 @@ namespace Snake
             if (_snake[0].Location.X == _fruit.Location.X && _snake[0].Location.Y == _fruit.Location.Y)
             {
                 Score++;
-                CreateSnakeTailElement();
-                GenerateFruit();
+                //Если игра закончена не нужно создавать новые объекты
+                if (Score != 224)
+                {
+                    CreateSnakeTailElement();
+                    GenerateFruit();
+                }                   
             }
         }
 
@@ -454,7 +463,14 @@ namespace Snake
                 {
                     Thread thread = new Thread(() =>
                     {
-                        Invoke((Action)(() => { MoveSnake();  EatFruit(); CheckBorders(); EatItself(); }));
+                        Invoke((Action)(() =>
+                        {
+                            //Если игра закончена не нужно делать лишних действий
+                            if (Score != 224)
+                            {
+                                MoveSnake(); EatFruit(); CheckBorders(); EatItself();
+                            }
+                        }));
                     });
                     thread.Start();
                 }
@@ -472,9 +488,9 @@ namespace Snake
             if (_gameStatus)
             {
                 _gameStatus = false;
-                SetStartPositionObjects();
-                //GenerateFruit();
+                Score = 1;
                 Lives = 1;
+                SetStartPositionObjects();                             
             }
             Invalidate();
         }
@@ -528,12 +544,14 @@ namespace Snake
                 _currentTailColor = TailColor;
             }
 
+            //Прорисовка карты
             Pen p = new Pen(MapColor, 1);
             for (int i = 0; i <= _mapSize / _sizeOfSides; i++)
             {
                 e.Graphics.DrawLine(p, 0, _sizeOfSides * i, _mapSize - 1, _sizeOfSides * i);
                 e.Graphics.DrawLine(p, _sizeOfSides * i, 0, _sizeOfSides * i, _mapSize - 1);
             }
+            //Вывод сообщение о результате игры
             if (_gameStatus)
             {
                 string s = (_score != 224) ? "Game Over" : "Victory";
@@ -545,13 +563,8 @@ namespace Snake
                     Alignment = StringAlignment.Center,
                     LineAlignment = StringAlignment.Center
                 };
-                //тоже самое, что и выше
-                //StringFormat sf = new StringFormat();
-                //sf.Alignment = StringAlignment.Center;
-                //sf.LineAlignment = StringAlignment.Center;
                 RectangleF rect = new RectangleF(0, 0, _mapSize, _mapSize);
                 e.Graphics.DrawString(s, font, fontB, rect, sf);
-                Score = 1;
             }           
             b.Dispose();
         }
