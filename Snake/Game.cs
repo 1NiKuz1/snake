@@ -203,12 +203,7 @@ namespace Snake
                         height = width;
                     }                   
                 }
-                if (_oldHeight < height && height % 15 == 1)
-                {
-                    _mapSize = height;
-                    _sizeOfSides = height / 15;
-                    SettingAdaptiveValuesForObjects(oldSizeOfSides);
-                } else if(_oldHeight > height)
+                if ((_oldHeight < height && height % 15 == 1) || _oldHeight > height)
                 {
                     _mapSize = height;
                     _sizeOfSides = height / 15;
@@ -263,7 +258,7 @@ namespace Snake
             int fruitLocX = _fruit.Location.X / oldSizeOfSides;
             int fruitLocY = _fruit.Location.Y / oldSizeOfSides;
             _fruit.Size = new Size(_sizeOfSides - 1, _sizeOfSides - 1);
-            _fruit.Location = new Point(_sizeOfSides * fruitLocX + 1, _sizeOfSides * fruitLocY + 1);           
+            _fruit.Location = new Point(_sizeOfSides * fruitLocX + 1, _sizeOfSides * fruitLocY + 1);
             if (_snake[Score] != null)
             {
                 for (int i = 0; i <= Score; i++)
@@ -281,7 +276,7 @@ namespace Snake
                     _snake[i].Location = new Point(_sizeOfSides * (_snake[i].Location.X / oldSizeOfSides) + 1,
                         _sizeOfSides * (_snake[i].Location.Y / oldSizeOfSides) + 1);
                 }
-            }       
+            }
         }       
 
         protected void GenerateFruit()
