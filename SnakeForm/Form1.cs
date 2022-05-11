@@ -44,5 +44,10 @@ namespace SnakeForm
         {
             lives.Text = "Lives: " + game.Lives;
         }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            e.Cancel = !game.GameStatus;
+        }
     }
 }

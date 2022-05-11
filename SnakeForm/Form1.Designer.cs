@@ -93,7 +93,6 @@
             this.game.Dock = System.Windows.Forms.DockStyle.Left;
             this.game.FructColor = System.Drawing.Color.Red;
             this.game.HeadColor = System.Drawing.Color.DarkGreen;
-            this.game.Lives = 1;
             this.game.Location = new System.Drawing.Point(15, 15);
             this.game.MapColor = System.Drawing.Color.Black;
             this.game.Name = "game";
@@ -120,6 +119,7 @@
             this.Name = "Form1";
             this.Padding = new System.Windows.Forms.Padding(15);
             this.Text = "Form1";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 

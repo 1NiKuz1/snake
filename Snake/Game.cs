@@ -102,7 +102,7 @@ namespace Snake
         public int Lives
         {
             get { return _lives; }
-            set
+            private set
             {
                 if (_lives != value)
                 {
@@ -174,7 +174,15 @@ namespace Snake
                     Invalidate();
                 }
             }
-        }       
+        }
+        
+        public bool GameStatus
+        { 
+            get
+            {
+                return _gameStatus;
+            }
+        }
 
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
@@ -452,28 +460,18 @@ namespace Snake
 
         protected void Update(Object source, ElapsedEventArgs e)
         {
-            try 
+            Thread thread = new Thread(() =>
             {
-                if (this.IsHandleCreated)
+                Invoke((Action)(() =>
                 {
-                    Thread thread = new Thread(() =>
+                    //Если игра закончена не нужно делать лишних действий
+                    if (Score != 224)
                     {
-                        Invoke((Action)(() =>
-                        {
-                            //Если игра закончена не нужно делать лишних действий
-                            if (Score != 224)
-                            {
-                                MoveSnake(); EatFruit(); CheckBorders(); EatItself();
-                            }
-                        }));
-                    });
-                    thread.Start();
-                }
-            } catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-                      
+                        MoveSnake(); EatFruit(); CheckBorders(); EatItself();
+                    }
+                }));
+            });
+            thread.Start();                    
         }
 
         public void StartProcess()
