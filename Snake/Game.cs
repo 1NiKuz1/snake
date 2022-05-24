@@ -184,6 +184,7 @@ namespace Snake
             }
         }
 
+        //Метод отвечающий за регулирование границ компонента
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
             //Запоминаем размеры одной клетки
@@ -237,6 +238,7 @@ namespace Snake
             this.KeyDown += new KeyEventHandler(OKP);                 
         }
 
+        //Метод отвечающий за инициализацию и размещение головы и первого эле-мента хвоста змейки, а также за инициализацию и размещение фрукта
         protected void SetStartPositionObjects()
         {
             _snake[0] = new PictureBox
@@ -259,8 +261,9 @@ namespace Snake
                 Size = new Size(_sizeOfSides - 1, _sizeOfSides - 1)
             };
             GenerateFruit();
-        }     
+        }
 
+        //Метод отвечающий за регулирование размеров и положения объектов внутри компонента
         private void SettingAdaptiveValuesForObjects(int oldSizeOfSides)
         {
             int fruitLocX = _fruit.Location.X / oldSizeOfSides;
@@ -285,8 +288,9 @@ namespace Snake
                         _sizeOfSides * (_snake[i].Location.Y / oldSizeOfSides) + 1);
                 }
             }
-        }       
+        }
 
+        //Метод отвечающий за размещение фрукта на экране
         protected void GenerateFruit()
         {
             int posFructX, posFructY;
@@ -320,12 +324,14 @@ namespace Snake
             this.Controls.Add(_fruit);
         }
 
+        //Метод отвечающий за полное удаление змейки с экрана
         protected void ClearSnake()
         {
             for (int i = 0; i <= Score; i++)
                 this.Controls.Remove(_snake[i]);          
         }
 
+        //Метод проверяющий выход змейки за границы поля
         protected void CheckBorders()
         {
             if ((_snake[0].Location.X < 0) || (_snake[0].Location.X > _mapSize - _sizeOfSides) ||
@@ -335,6 +341,7 @@ namespace Snake
             }                    
         }
 
+        //Метод обрабатывающий вхождение головы змейки в свой хвост
         protected void EatItself()
         {
             for (int i = 2; i < Score; i++)
@@ -355,6 +362,7 @@ namespace Snake
             GhostSnake();
         }
 
+        //Метод инициализации нового элемента змейки
         protected void CreateSnakeTailElement()
         {
             _snake[Score] = new PictureBox
@@ -367,6 +375,7 @@ namespace Snake
             this.Controls.Add(_snake[Score]);
         }
 
+        //Метод обрабатывающий пересечение змейки с фруктом
         protected void EatFruit()
         {
             if (_snake[0].Location.X == _fruit.Location.X && _snake[0].Location.Y == _fruit.Location.Y)
@@ -381,6 +390,7 @@ namespace Snake
             }
         }
 
+        //Метод меняющий вектор направления на противоположный
         protected void InverseDirection()
         {
             if (_dirX != 0)
@@ -393,6 +403,7 @@ namespace Snake
             }
         }
 
+        //Метод передвигающий змейку на новую позицию
         protected void SetNewSnakePosition()
         {
             for (int i = Score; i >= 1; i--)
@@ -405,7 +416,7 @@ namespace Snake
             _snake[0].Location = new Point(snakeLocationX, snakeLocationY);         
         }
 
-
+        //Метод осуществляющий передвижение змейки
         protected void MoveSnake()
         {
             if ((_snake[0].Location.X + _dirX * _sizeOfSides != _snake[1].Location.X) || 
@@ -420,6 +431,7 @@ namespace Snake
             }
         }
 
+        //Метод меняющий состояние змейки
         protected void DurationGhost()
         {
             if (!_snakeStatus && _currentDurationGhost <= 20)
@@ -433,6 +445,7 @@ namespace Snake
             }
         }
 
+        //Метод меняющий цвет змейки на заданный
         protected void ChangeSnakeColor(Color head, Color tail)
         {
             for (int i = 0; i <= _score; i++)
@@ -458,6 +471,7 @@ namespace Snake
             }
         }
 
+        //Метод отвечающий за выполнение основной логики за каждый тик таймера
         protected void Update(Object source, ElapsedEventArgs e)
         {
             Thread thread = new Thread(() =>
@@ -474,6 +488,7 @@ namespace Snake
             thread.Start();                    
         }
 
+        //Метод вызывающийся при запуске игры
         public void StartProcess()
         {
             _timer.Enabled = true;
@@ -488,6 +503,7 @@ namespace Snake
             Invalidate();
         }
 
+        //Метод вызывающийся при завершении игры
         public void EndProcess()
         {
             _timer.Stop();
@@ -500,6 +516,7 @@ namespace Snake
             Invalidate();
         }
 
+        //Метод задающий вектор направления змейки в соответствие с нажатой клави-шей на клавиатуре
         protected void OKP(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode.ToString())
@@ -523,6 +540,7 @@ namespace Snake
             }
         }
 
+        //Метод отвечающий за прорисовку карты, змейки и фрукта в компоненте
         protected override void OnPaint(PaintEventArgs e)
         {
             Brush b = new SolidBrush(BackColor);
