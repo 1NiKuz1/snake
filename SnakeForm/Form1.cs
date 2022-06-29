@@ -13,6 +13,7 @@ namespace SnakeForm
 {
     public partial class Form1 : Form
     {
+        bool flag = false;
         public Form1()
         {
             InitializeComponent();
@@ -21,6 +22,7 @@ namespace SnakeForm
         private void startButton_Click(object sender, EventArgs e)
         {
             game.StartProcess();
+            flag = true;
         }
 
         private void endButton_Click(object sender, EventArgs e)
@@ -47,7 +49,8 @@ namespace SnakeForm
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            e.Cancel = !game.GameStatus;
+            if (flag)
+                e.Cancel = !game.GameStatus;
         }
     }
 }
